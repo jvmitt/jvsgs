@@ -13,4 +13,4 @@ Tools and resources used:<br>
 Recommended transmitter: [DIY-Multiprotocol-TX-Module](https://github.com/pascallanger/DIY-Multiprotocol-TX-Module)<br>
 Embedded framework: [RTIC](https://github.com/rtic-rs/rtic)<br> 
 Electronics design: [KiCAD](https://github.com/KiCad)<br> 
-[FreeCAD](https://github.com/FreeCAD/FreeCAD)<br>
+Case 3D model design:[FreeCAD](https://github.com/FreeCAD/FreeCAD)<br>
