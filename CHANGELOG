@@ -1,0 +1,8 @@
+
+Version 0.0.1:
+This version is focused on releasing the initial code of the project. Soon i'll add the CAD files along with the updated code.
+- RTIC implementation.
+- Basic defmt logging.
+- Operational mode (Engaged by default as of now).
+- Analog input reading.
+- PPM Generation implemented using Rust based on David Hasko's .ino code.
