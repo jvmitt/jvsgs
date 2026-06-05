@@ -1,0 +1,12 @@
+/home/jvs/jvsgs/firmware/target/thumbv7em-none-eabihf/debug/deps/fugit-53dcd2b287e28c4c.d: /home/jvs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fugit-0.3.9/src/lib.rs /home/jvs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fugit-0.3.9/src/aliases.rs /home/jvs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fugit-0.3.9/src/duration.rs /home/jvs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fugit-0.3.9/src/helpers.rs /home/jvs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fugit-0.3.9/src/instant.rs /home/jvs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fugit-0.3.9/src/rate.rs
+
+/home/jvs/jvsgs/firmware/target/thumbv7em-none-eabihf/debug/deps/libfugit-53dcd2b287e28c4c.rlib: /home/jvs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fugit-0.3.9/src/lib.rs /home/jvs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fugit-0.3.9/src/aliases.rs /home/jvs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fugit-0.3.9/src/duration.rs /home/jvs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fugit-0.3.9/src/helpers.rs /home/jvs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fugit-0.3.9/src/instant.rs /home/jvs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fugit-0.3.9/src/rate.rs
+
+/home/jvs/jvsgs/firmware/target/thumbv7em-none-eabihf/debug/deps/libfugit-53dcd2b287e28c4c.rmeta: /home/jvs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fugit-0.3.9/src/lib.rs /home/jvs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fugit-0.3.9/src/aliases.rs /home/jvs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fugit-0.3.9/src/duration.rs /home/jvs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fugit-0.3.9/src/helpers.rs /home/jvs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fugit-0.3.9/src/instant.rs /home/jvs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fugit-0.3.9/src/rate.rs
+
+/home/jvs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fugit-0.3.9/src/lib.rs:
+/home/jvs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fugit-0.3.9/src/aliases.rs:
+/home/jvs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fugit-0.3.9/src/duration.rs:
+/home/jvs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fugit-0.3.9/src/helpers.rs:
+/home/jvs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fugit-0.3.9/src/instant.rs:
+/home/jvs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fugit-0.3.9/src/rate.rs:

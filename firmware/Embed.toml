@@ -1,0 +1,10 @@
+[default.general]
+chip = "STM32F411CEUx"
+
+[default.rtt]
+enabled = true
+
+[[default.rtt.up_channels]]
+channel = 0
+mode = "BlockIfFull"
+format = "Defmt"

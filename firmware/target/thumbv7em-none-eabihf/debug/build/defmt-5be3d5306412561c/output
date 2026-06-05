@@ -1,0 +1,3 @@
+cargo:rustc-link-search=/home/jvs/jvsgs/firmware/target/thumbv7em-none-eabihf/debug/build/defmt-5be3d5306412561c/out
+cargo:rustc-check-cfg=cfg(c_variadic)
+cargo:rustc-check-cfg=cfg(no_cas)
