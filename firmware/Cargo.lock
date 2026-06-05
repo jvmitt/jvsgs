@@ -1077,7 +1077,7 @@ dependencies = [
 
 [[package]]
 name = "jvsgs"
-version = "0.1.0"
+version = "0.0.1"
 dependencies = [
  "cortex-m",
  "defmt 1.0.1",
