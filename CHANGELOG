@@ -6,3 +6,9 @@ This version is focused on releasing the initial code of the project. Soon i'll 
 - Operational mode (Engaged by default as of now).
 - Analog input reading.
 - PPM Generation implemented using Rust based on David Hasko's .ino code.
+
+Version 0.0.2:
+- Added case.FCStd CAD file.
+- Added exports of the CAD file.
+- 3D printed and verified print tolerances in FDM considering PETG as the intended material.
+- Finished scope for the future v0.1.0 version (first fully released prototype).
