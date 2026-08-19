@@ -4,7 +4,7 @@ The objective of this project is to make a safe, resistant and relatively cheap 
 
 The project uses Rust for its firmware, features a STM32F411CEU6 as its chip, a redundant two battery system with hot-swap and charging, and a case for ease of use.<br>
 
-![Project case](hardware/case.png)
+![Project case](docs/images/case.png)
 
 How the power system works:<br>
 When the main (12v) power source is connected, the connection of both batteries are disabled and the charging modules activates. Includes an ORING circuit that enables hot-swap, making the operation without an external power source infinite as long as you have enough 2S (7.4v) batteries with a balance lead available or maybe even car batteries for the main power source. Includes BMS protection and voltage monitoring.<br>
