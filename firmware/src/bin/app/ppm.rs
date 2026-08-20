@@ -127,28 +127,19 @@ pub mod ppm {
     }
 
     pub fn filter_ppm(ppm: &mut PpmState) {
-        let switch_state: u8;
-        if ppm.config.switch_pin.is_high() {
-            switch_state = 1;
+        let switch_state: u8 = if ppm.config.switch_pin.is_high() {
+            1
         } else {
-            switch_state = 0;
+            0
         };
 
-        if ppm.ppm[ppm.config.channel_to_modify] >= 0 {
-            ppm.ppm[ppm.config.channel_to_modify] += ppm.current_channel_step as u16;
-        } else {
-            ppm.ppm[ppm.config.channel_to_modify] -= ppm.current_channel_step as u16;
-        };
+        ppm.ppm[ppm.config.channel_to_modify] += ppm.current_channel_step as u16;
 
         if ppm.ppm[ppm.config.channel_to_modify] > 2000
             || ppm.ppm[ppm.config.channel_to_modify] < 1000
         {
             ppm.current_channel_step *= -1;
-            if ppm.ppm[ppm.config.channel_to_modify] >= 0 {
-                ppm.ppm[ppm.config.channel_to_modify] += ppm.current_channel_step as u16;
-            } else {
-                ppm.ppm[ppm.config.channel_to_modify] -= ppm.current_channel_step as u16;
-            };
+            ppm.ppm[ppm.config.channel_to_modify] += ppm.current_channel_step as u16;
         };
 
         ppm.previous_switch_value = switch_state;

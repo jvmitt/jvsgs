@@ -2,10 +2,10 @@
 #![no_std]
 #![feature(type_alias_impl_trait)]
 
-#![feature(proc_macro_hygiene)]
+//#![feature(proc_macro_hygiene)]
 
 // Temporary
-#[allow(unused_mut)]
+#![allow(unused)]
 
 use jvsgs as _; // global logger + panicking-behavior + memory layout
 use stm32f4xx_hal::{
@@ -13,13 +13,11 @@ use stm32f4xx_hal::{
             config::{AdcConfig, SampleTime},
             Adc,
         },
-       gpio::*,
-       i2c::I2c,
        rcc::*,
-       pac::{self, syscfg, I2C1, TIM1, TIM2, TIM3, TIM4, TIM5, ADC1},
-       serial::Tx,
+       pac::{self, TIM1},
        prelude::*,
-       timer::{self, CounterMs, Event, Timer2},
+       rtc::{Rtc, Event as RtcEvent},
+       timer::{self},
 };
 
 use rtic_monotonics::systick::prelude::*;
@@ -37,7 +35,6 @@ mod app {
 
     use stm32f4xx_hal::pac::ADC1;
     use stm32f4xx_hal::rcc::Config;
-    use stm32f4xx_hal::gpio;
     use stm32f4xx_hal::gpio::*;
     use super::*;
 
@@ -63,6 +60,7 @@ mod app {
         ppm: PpmState,
         delay_val: u32,
         adc_module: Adc<ADC1>,
+        rtc: Rtc,
     }
 
     #[local]
@@ -88,20 +86,46 @@ mod app {
     fn init(cx: init::Context) -> (Shared, Local) {
         defmt::info!("Initializing JVSGS...");
 
-        let dp = cx.device; // PAC Device Peripherals
+        let env = Env {
+            var: Var {
+                is_armed: true,
+                in_panic: false,
+                status_code: 0,
+            },
+            board: Board {
+                name: "STM32F411CEU6",
+                family: "STM32F4",
+                mcu: "ARM32",
+                adc_resolution: 4096,
+            },
+        };
+
+        let mut dp = cx.device; // PAC Device Peripherals
         let cp = cx.core; // Cortex-M Core Peripherals
 
         Mono::start(cp.SYST, 16_000_000);
 
+        let mut rtc = Rtc::new(dp.RTC, &mut dp.RCC, &mut dp.PWR);
+        rtc.listen(&mut dp.EXTI, RtcEvent::Wakeup);
+
         // STM32 Base
         dp.RCC.apb1enr().modify(|_, w| w.tim2en().set_bit()); // For PPM timing before RCC gets taken
-        let ppre1 = ((dp.RCC.cfgr().read().bits() >> 10) & 0b111) as u8; // pass it to apb_2x bool
+        let _ppre1 = ((dp.RCC.cfgr().read().bits() >> 10) & 0b111) as u8; // pass it to apb_2x bool
         let mut rcc = dp.RCC.freeze(
             Config::hsi()
                 .sysclk(64.MHz())
                 .use_hse(25.MHz())
         );
         let clocks = rcc.clocks;
+
+        let _ = rtc.set_year(2026);
+        let _ = rtc.set_month(06);
+        let _ = rtc.set_day(06);
+        let _ = rtc.set_hours(05);
+        let _ = rtc.set_minutes(00);
+        let _ = rtc.set_seconds(00);
+
+        rtc.enable_wakeup(10.secs().into());
 
         let gpioa = dp.GPIOA.split(&mut rcc);
         let gpiob = dp.GPIOB.split(&mut rcc);
@@ -135,67 +159,65 @@ mod app {
 
         let mut builtin_led = gpioc.pc13.into_push_pull_output();
 
-        let mut ppm: PpmState = init_ppm(
+        let ppm: PpmState = init_ppm(
             8, // Number of PPM channels
             7, // Mode channel, init as 1000
             2, // Throttle channel, init as 1000
             1500, // Every channel but throttle and mode default value
             22500, // Frame length
             300, // Pulse length
-            true, // State tha is considered ON on your system
+            true, // State that is considered ON on your system
             gpiob.pb12.into_push_pull_output().erase(), // PPM signal output pin
             gpiob.pb13.into_pull_up_input().erase(), // Switch pin
             100, // Switch step
             unsafe { &*pac::TIM2::ptr() }, // TIM2 register block
             true, // apb_2x
-            clocks.pclk1().raw() as u32, // Pclk hz
+            clocks.pclk1().raw(), // Pclk hz
             2_000_000u32, // Tick hz
         ); defmt::info!("PPM initialized with {} channels.", ppm.config.channel_number);
-
-        // Buttons
-        let mut navigation_btns = gpioa.pa15.into_pull_up_input();
 
         // Min and Max value as of now are placeholders, read it from a calibration function or file
         let control_panel = ControlPanel {
             arm_switch: gpiob.pb3.into_pull_up_input().erase(),
             abort_btn: gpiob.pb4.into_pull_up_input().erase(),
+            general_btns: gpiob.pb5.into_pull_up_input().erase(),
             left_potentiometer: Potentiometer {
                 pin: gpioa.pa1.into_analog(),
                 min: 0,
-                max: 4096,
+                max: env.board.adc_resolution,
             },
             right_potentiometer: Potentiometer {
                 pin: gpioa.pa7.into_analog(),
                 min: 0,
-                max: 4096,
+                max: env.board.adc_resolution,
             },
             left_joystick: Joystick {
                 x: Potentiometer {
                     pin: gpioa.pa5.into_analog(),
                     min: 0,
-                    max: 4096,
+                    max: env.board.adc_resolution,
                 },
                 y: Potentiometer {
                     pin: gpioa.pa4.into_analog(),
                     min: 0,
-                    max: 4096,
+                    max: env.board.adc_resolution,
                 },
             },
             right_joystick: Joystick {
                 x: Potentiometer {
                     pin: gpiob.pb1.into_analog(),
                     min: 0,
-                    max: 4096,
+                    max: env.board.adc_resolution,
                 },
                 y: Potentiometer {
                     pin: gpiob.pb0.into_analog(),
                     min: 0,
-                    max: 4096,
+                    max: env.board.adc_resolution,
                 },
             },
         };
 
-        let mut control_output = ControlOutput {
+        let control_output = ControlOutput {
             roll: 1500,
             pitch: 1500,
             throttle: 1000,
@@ -204,7 +226,7 @@ mod app {
         };
 
         // User Cues
-        let mut buzzer = gpiob.pb9.into_push_pull_output();
+        let buzzer = gpiob.pb9.into_push_pull_output();
 
         // Successfull setup confirmation 
         defmt::info!("Initialization complete.");
@@ -218,6 +240,7 @@ mod app {
                 ppm,
                 delay_val: 1000_u32,
                 adc_module: adc,
+                rtc,
             },
             Local {
                 delay,
@@ -276,6 +299,10 @@ mod app {
                 cx.local.control_output.yaw
             );
              */
+
+            //cx.shared.rtc.lock(|rtc| {
+            //    defmt::info!("{:?}", rtc.get_datetime().as_hms());
+            //});
 
 
             cx.shared.ppm.lock(|ppm| {

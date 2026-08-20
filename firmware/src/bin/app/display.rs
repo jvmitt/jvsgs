@@ -1,8 +1,1 @@
-
-pub mod tft {
-
-    pub struct display {
-
-    }
-
-}
+pub mod display {}

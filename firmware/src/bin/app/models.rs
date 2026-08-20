@@ -1,8 +1,4 @@
-
-
 pub mod models {
-
-    use stm32f4xx_hal::gpio::{ErasedPin, Input, Output};
 
     // System Base
     pub struct Date {
@@ -15,10 +11,10 @@ pub mod models {
     }
 
     // Logging
-    enum CraftType {
+    pub enum CraftType {
         Plane,
         Quad,
-        VTOL,
+        Vtol,
     }
 
     pub struct Craft {
@@ -29,5 +25,4 @@ pub mod models {
         pub use_count: u64,
         pub last_use: Date,
     }
-
 }
